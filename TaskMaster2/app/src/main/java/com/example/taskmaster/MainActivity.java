@@ -1,6 +1,8 @@
 package com.example.taskmaster;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,6 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -94,6 +98,26 @@ public class MainActivity extends AppCompatActivity {
         String username = preferences.getString("username", "user");
 
         homeuser.setText(username +"'s page");
+
+
+        String description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit." +
+                " Phasellus fermentum nisi eget maximus posuere. Ut placerat finibus sapien non viverra." +
+                " Donec a auctor mi. Nunc facilisis pretium vulputate. Aliquam erat volutpat. " +
+                "Praesent elementum nisl lobortis nunc mollis commodo. Aliquam feugiat dui urna, vel ornare leo rhoncus quis. " +
+                "Nam imperdiet mauris vitae condimentum sagittis. Ut justo erat, ornare sed nunc ac, laoreet porta turpis.";
+
+
+        ArrayList<Tasks> tasks = new ArrayList<>();
+        tasks.add(new Tasks("Task one", description, "assigned"));
+        tasks.add(new Tasks("Task two", description, "in progress"));
+        tasks.add(new Tasks("Task three", description, "new"));
+        tasks.add(new Tasks("Task four", description, "complete"));
+
+
+        RecyclerView taskList = findViewById(R.id.recyclerView);
+        taskList.setLayoutManager(new LinearLayoutManager(this));
+        taskList.setAdapter(new TaskAdapter(   this, tasks));
+
 
 
 

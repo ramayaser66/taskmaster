@@ -13,21 +13,27 @@ public class TaskDetailPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_detail_page);
 
+        Intent intent = getIntent();
+
+        String titlei = intent.getStringExtra("title");
+        String bodyi = intent.getStringExtra("body");
+        String statei = intent.getStringExtra("state");
+
+
+
+      TextView state = findViewById(R.id.detailpagestae);
+      state.setText(statei);
 
         TextView taskAtitle = findViewById(R.id.detailpagetitle);
-        Intent taskA = getIntent();
 
-        String title = taskA.getStringExtra("title");
-        taskAtitle.setText(title);
+        taskAtitle.setText(titlei);
 
-        String description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit." +
-                " Phasellus fermentum nisi eget maximus posuere. Ut placerat finibus sapien non viverra." +
-                " Donec a auctor mi. Nunc facilisis pretium vulputate. Aliquam erat volutpat. " +
-                "Praesent elementum nisl lobortis nunc mollis commodo. Aliquam feugiat dui urna, vel ornare leo rhoncus quis. " +
-                "Nam imperdiet mauris vitae condimentum sagittis. Ut justo erat, ornare sed nunc ac, laoreet porta turpis.";
 
         TextView taskAdescription = findViewById(R.id.detaildescription);
-        taskAdescription.setText(description);
+        taskAdescription.setText(bodyi);
+
+
+
 
 
 
