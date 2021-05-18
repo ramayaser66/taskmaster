@@ -17,7 +17,8 @@ public class AddTask extends AppCompatActivity {
         setContentView(R.layout.activity_add_task);
 
         Button firstButton = AddTask.this.findViewById(R.id.button4);
-
+        TextView taskAdded = findViewById(R.id.taskadded);
+        taskAdded.setVisibility(View.GONE);
         firstButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -25,16 +26,18 @@ public class AddTask extends AppCompatActivity {
                 myTask.setVisibility(View.INVISIBLE);
 
                 TextView taskdesc = findViewById(R.id.textView3);
-                taskdesc.setText("Submitted");
+//                taskdesc.setText("Submitted");
 
                 TextView dosmth= findViewById(R.id.editTextTextPersonName2);
-                dosmth.setVisibility(View.INVISIBLE);
+//                dosmth.setVisibility(View.INVISIBLE);
 
                 TextView taskTile= findViewById(R.id.textView4);
-                taskTile.setVisibility(View.INVISIBLE);
+//                taskTile.setVisibility(View.INVISIBLE);
 
                 TextView taskcount= findViewById(R.id.textView5);
-                taskcount.setVisibility(View.INVISIBLE);
+//                taskcount.setVisibility(View.INVISIBLE);
+                taskAdded.setVisibility(View.VISIBLE);
+                taskAdded.setText("Task added!");
 
             }
         });

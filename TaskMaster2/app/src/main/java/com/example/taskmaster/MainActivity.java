@@ -43,12 +43,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
+        String description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit." +
+                " Phasellus fermentum nisi eget maximus posuere. Ut placerat finibus sapien non viverra." +
+                " Donec a auctor mi. Nunc facilisis pretium vulputate. Aliquam erat volutpat. " +
+                "Praesent elementum nisl lobortis nunc mollis commodo. Aliquam feugiat dui urna, vel ornare leo rhoncus quis. " +
+                "Nam imperdiet mauris vitae condimentum sagittis. Ut justo erat, ornare sed nunc ac, laoreet porta turpis.";
+
         Button taskA = MainActivity.this.findViewById(R.id.TaskAbtn);
         taskA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent sendTaskA = new Intent(MainActivity.this, TaskDetailPage.class);
                 sendTaskA.putExtra("title", "taskA");
+                sendTaskA.putExtra("body", description);
+                sendTaskA.putExtra("state", "complete");
                 startActivity(sendTaskA);
 
 
@@ -63,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent sendTaskB = new Intent(MainActivity.this, TaskDetailPage.class);
                 sendTaskB.putExtra("title", "taskB");
+                sendTaskB.putExtra("body", description);
+                sendTaskB.putExtra("state", "new");
                 startActivity(sendTaskB);
 
 
@@ -76,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent sendTaskC = new Intent(MainActivity.this, TaskDetailPage.class);
                 sendTaskC.putExtra("title", "taskC");
+                sendTaskC.putExtra("body", description);
+                sendTaskC.putExtra("state", "Assigned");
                 startActivity(sendTaskC);
 
 
@@ -100,11 +114,7 @@ public class MainActivity extends AppCompatActivity {
         homeuser.setText(username +"'s page");
 
 
-        String description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit." +
-                " Phasellus fermentum nisi eget maximus posuere. Ut placerat finibus sapien non viverra." +
-                " Donec a auctor mi. Nunc facilisis pretium vulputate. Aliquam erat volutpat. " +
-                "Praesent elementum nisl lobortis nunc mollis commodo. Aliquam feugiat dui urna, vel ornare leo rhoncus quis. " +
-                "Nam imperdiet mauris vitae condimentum sagittis. Ut justo erat, ornare sed nunc ac, laoreet porta turpis.";
+
 
 
         ArrayList<Tasks> tasks = new ArrayList<>();

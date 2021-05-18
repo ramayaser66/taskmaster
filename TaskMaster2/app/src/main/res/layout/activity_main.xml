@@ -8,37 +8,46 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="137dp"
-        android:layout_height="51dp"
+        android:layout_width="124dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:text="My Tasks"
-        />
+        android:text="My Tasks" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="148dp"
+        android:layout_below="@+id/textView" />
+
 
     <LinearLayout
         android:id="@+id/add_all_btn_cont"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="10dp"
         android:layout_below="@+id/recyclerView"
-      >
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
+
         <Button
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
 
-            android:text="Add Task"
-            />
+            android:text="Add Task" />
 
         <Button
             android:id="@+id/button2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:layout_marginLeft="50dp"
+            android:layout_marginLeft="25dp"
             android:text="All Tasks" />
     </LinearLayout>
-
 
     <Button
         android:id="@+id/settingsbtn"
@@ -48,59 +57,52 @@
         android:layout_centerHorizontal="true"
         android:text="Settings " />
 
+
     <LinearLayout
         android:id="@+id/task_button_cont"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
         android:layout_below="@+id/usernamehomepage"
-        >
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="33dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_centerHorizontal="true">
 
         <Button
             android:id="@+id/TaskAbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Task A "
-            android:layout_marginLeft="8dp"
-           />
+            android:layout_marginLeft="10dp"
+            android:text="Task A " />
 
         <Button
             android:id="@+id/TaskBbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TaskB"
-            android:layout_marginLeft="20dp"
-            />
+            android:layout_marginLeft="10dp"
+            android:text="TaskB" />
 
         <Button
             android:id="@+id/taskCbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="taskC"
-            android:layout_marginLeft="20dp"
-            />
+            android:layout_marginLeft="10dp"
+            android:text="taskC" />
     </LinearLayout>
-
 
     <TextView
         android:id="@+id/usernamehomepage"
-        android:layout_width="wrap_content"
+        android:layout_width="165dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/add_all_btn_cont"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="10dp"
-        android:text="username"
-        />
-
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView" />
-
-
-
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="120dp"
+        android:layout_marginTop="19dp"
+        android:layout_marginEnd="126dp"
+        android:layout_marginBottom="10dp"
+        android:text="username" />
 
 
 </RelativeLayout>

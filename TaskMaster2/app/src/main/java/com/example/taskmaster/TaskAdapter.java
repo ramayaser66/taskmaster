@@ -67,6 +67,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
         TextView title = holder.itemView.findViewById(R.id.fragmentTitle);
         TextView body = holder.itemView.findViewById(R.id.fragmentbody);
+        body.setVisibility(View.GONE);
         TextView state = holder.itemView.findViewById(R.id.fragmentstate);
 
         title.setText(holder.tasks.getTitle());
