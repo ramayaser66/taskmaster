@@ -54,5 +54,14 @@ the details page for task B
 the details page for task C  
 
 
+> lab-28 
+![](screenshots/lab-28A.jpg)
+ 
+ the main page now has a recycler view list 
+ that holds tasks each has a title and a state, once you click on a state you will be directed to the detail page for this task 
+
+
+
+
 
 
