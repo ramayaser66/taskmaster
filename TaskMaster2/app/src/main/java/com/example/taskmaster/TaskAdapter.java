@@ -17,10 +17,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
 
     Context context;
-   public ArrayList<Tasks> tasksList;
+   public List<Tasks> tasksList;
 
 
-    public TaskAdapter(Context context, ArrayList<Tasks> tasksList) {
+    public TaskAdapter(Context context,List<Tasks> tasksList) {
         this.context = context ;
         this.tasksList = tasksList;
     }
@@ -77,18 +77,17 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         holder.setItemClickListener(new ItemClickListener() {
             @Override
             public void onItemClick(View v, int postion) {
-                String title = tasksList.get(postion).getTitle();
-                String body  = tasksList.get(postion).getBody();
-                String state  = tasksList.get(postion).getState();
+                String str_title = tasksList.get(postion).getTitle();
+                String str_body  = tasksList.get(postion).getBody();
+                String str_state  = tasksList.get(postion).getState();
+                 int id = tasksList.get(position).getId();
 
                 Intent intent = new Intent(context, TaskDetailPage.class);
-                intent.putExtra("title", title);
-                intent.putExtra("body", body);
-                intent.putExtra("state", state);
+                intent.putExtra("title", str_title);
+                intent.putExtra("body", str_body);
+                intent.putExtra("state", str_state);
+                intent.putExtra("id", id);
                 context.startActivity(intent);
-
-
-
 
             }
         });
