@@ -61,6 +61,51 @@ the details page for task C
  that holds tasks each has a title and a state, once you click on a state you will be directed to the detail page for this task 
 
 
+ > # lab-29 
+
+![](screenshots/hompepage-withoutAnyTasks29.jpg)
+
+ the home page when there are no tasks added 
+
+![](screenshots/homepage-29.jpg)
+
+the home page when there are is only one tasks added
+
+![](screenshots/homePageWhenYouSaveUserName29.jpg)
+
+the home page when the user sets the username and saves it 
+
+![](screenshots/addTaskPage-29.jpg)
+
+ the addTaskPage when you don't have any tasks yet 
+ you can see the task count equals 0 
+
+ 
+![](screenshots/addTaskPageWhenYouAddASecondTask29.jpg)
+
+when you add another task you can see that the number for the task count is changed 
+
+![](screenshots/allTasksPage29.jpg)
+
+here you will see all the tasks you have 
+
+
+![](screenshots/deleteTask29.jpg)
+here is the details page where you can delete the task that you don't want anymore 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
