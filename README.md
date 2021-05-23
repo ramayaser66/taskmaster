@@ -94,6 +94,18 @@ here you will see all the tasks you have
 here is the details page where you can delete the task that you don't want anymore 
 
 
+> # lab-31 Espresso tests 
+
+test were added to this application
+- testing for important UI elements, if they are displayed on the page.
+
+-  test taping on a task, and assert that the resulting activity displays the name of that task
+this was implemented on the recycler view - the first task 
+
+-  test the edit of the user’s username, and assert that it says the correct thing on the homepage
+
+
+
 
 
 
