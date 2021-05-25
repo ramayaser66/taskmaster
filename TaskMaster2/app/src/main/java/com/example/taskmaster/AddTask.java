@@ -7,11 +7,17 @@ import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.amplifyframework.AmplifyException;
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.datastore.AWSDataStorePlugin;
+import com.amplifyframework.datastore.generated.model.Task;
 
 import java.util.List;
 
@@ -25,6 +31,16 @@ EditText title ,body,state;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
+
+        try {
+            Amplify.addPlugin(new AWSDataStorePlugin());
+            Amplify.configure(getApplicationContext());
+
+            Log.i("Tutorial", "Initialized Amplify");
+        } catch (AmplifyException e) {
+            Log.e("Tutorial", "Could not initialize Amplify", e);
+        }
+
 
         // the back icon
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -67,7 +83,24 @@ EditText title ,body,state;
                     Toast.makeText(AddTask.this, "Task Added! ", Toast.LENGTH_SHORT).show();
 
 //                        AppDatabase.getDatabase(getApplicationContext()).tasksDao().insertAll(tasksi);
-                    AppDatabase.getDatabase(getApplicationContext()).tasksDao().insertTasks(tasksi);
+                    // replace this with the amplify code
+//                    AppDatabase.getDatabase(getApplicationContext()).tasksDao().insertTasks(tasksi);
+
+                    Task item = Task.builder()
+                            .title(stringTitle)
+                            .description(stringBody)
+                            .status(stringState)
+                            .build();
+
+
+                    Amplify.DataStore.save(item,
+                            success -> Log.i("Tutorial", "Saved item: " + success.item().getTitle()),
+                            error -> Log.e("Tutorial", "Could not save item to DataStore", error)
+                    );
+
+
+
+
                     Intent intent = new Intent(AddTask.this, MainActivity.class);
                     startActivity(intent);
 

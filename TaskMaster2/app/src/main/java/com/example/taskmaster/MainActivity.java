@@ -9,11 +9,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.amplifyframework.AmplifyException;
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.datastore.AWSDataStorePlugin;
+import com.amplifyframework.datastore.generated.model.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +34,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        try {
+            Amplify.addPlugin(new AWSDataStorePlugin());
+            Amplify.configure(getApplicationContext());
+
+            Log.i("Tutorial", "Initialized Amplify");
+        } catch (AmplifyException e) {
+            Log.e("Tutorial", "Could not initialize Amplify", e);
+        }
 
         // go to add Task page
         Button firstButton = MainActivity.this.findViewById(R.id.button);
@@ -157,9 +173,34 @@ public class MainActivity extends AppCompatActivity {
 //            public void run() {
 
 
-             List<Tasks> tasks = AppDatabase.getDatabase(getApplicationContext()).tasksDao().getAll();
-             taskList.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-             taskList.setAdapter(new TaskAdapter(MainActivity.this,tasks));
+        // replace with amplify
+//             List<Tasks> tasks = AppDatabase.getDatabase(getApplicationContext()).tasksDao().getAll();
+
+        taskList.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        Amplify.DataStore.query(Task.class,
+                task -> {
+                    List<Tasks> tasks = new ArrayList<>();
+                    while (task.hasNext()) {
+                        Task todo = task.next();
+                        Tasks newTask = new Tasks();
+
+
+                        newTask.setTitle(todo.getTitle());
+                        newTask.setBody(todo.getDescription());
+                        newTask.setState(todo.getStatus());
+
+                        tasks.add(newTask); 
+
+                        taskList.setAdapter(new TaskAdapter(MainActivity.this,tasks));
+
+
+                        Log.i("Tutorial", "==== Todo ====");
+                        Log.i("Tutorial", "Name: " + todo.getTitle());
+                    }
+                },
+                failure -> Log.e("Tutorial", "Could not query DataStore", failure)
+        );
+
 
 //            }
 //        });
