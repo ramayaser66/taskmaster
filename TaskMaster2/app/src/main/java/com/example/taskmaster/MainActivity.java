@@ -17,6 +17,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.amplifyframework.AmplifyException;
+import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
+import com.amplifyframework.auth.options.AuthSignOutOptions;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.AWSDataStorePlugin;
 import com.amplifyframework.datastore.generated.model.Task;
@@ -28,22 +30,72 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-
+    Button signup, login, logout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
+// for cognito - amplify
         try {
-            Amplify.addPlugin(new AWSDataStorePlugin());
+            // Add this line, to include the Auth plugin.
+            Amplify.addPlugin(new AWSCognitoAuthPlugin());
             Amplify.configure(getApplicationContext());
-
-            Log.i("Tutorial", "Initialized Amplify");
-        } catch (AmplifyException e) {
-            Log.e("Tutorial", "Could not initialize Amplify", e);
+            Log.i("MyAmplifyApp", "Initialized Amplify");
+        } catch (AmplifyException error) {
+            Log.e("MyAmplifyApp", "Could not initialize Amplify", error);
         }
+
+        TextView homeuser = findViewById(R.id.usernamehomepage);
+      signup = findViewById(R.id.signup);
+       login = findViewById(R.id.signin);
+        logout = findViewById(R.id.logout);
+
+       signup.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               Intent goToSignUp = new Intent(MainActivity.this, SignUp.class);
+               startActivity(goToSignUp);
+           }
+       });
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent goToLogin = new Intent(MainActivity.this, Login.class);
+                startActivity(goToLogin);
+            }
+        });
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Amplify.Auth.signOut(
+                        AuthSignOutOptions.builder().globalSignOut(true).build(),
+                        () -> Log.i("AuthQuickstart", "Signed out globally"),
+                        error -> Log.e("AuthQuickstart", error.toString())
+                );
+            }
+        });
+
+        Intent II = getIntent();
+        String userName = II.getStringExtra("userName");
+
+        if(userName != null){
+            homeuser.setText(userName +"'s page");
+
+        }
+
+
+
+        // for the room lab
+//        try {
+//            Amplify.addPlugin(new AWSDataStorePlugin());
+//            Amplify.configure(getApplicationContext());
+//
+//            Log.i("Tutorial", "Initialized Amplify");
+//        } catch (AmplifyException e) {
+//            Log.e("Tutorial", "Could not initialize Amplify", e);
+//        }
 
         // go to add Task page
         Button firstButton = MainActivity.this.findViewById(R.id.button);
@@ -135,10 +187,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         // display the user's username in the homepage
-            TextView homeuser = findViewById(R.id.usernamehomepage);
+
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-             String username = preferences.getString("username", "user");
-              homeuser.setText(username +"'s page");
+             String storeUserName = preferences.getString("username", "user");
+             if(userName ==null){
+                 homeuser.setText(storeUserName +"'s page");
+             }
 
 
 
@@ -177,29 +231,31 @@ public class MainActivity extends AppCompatActivity {
 //             List<Tasks> tasks = AppDatabase.getDatabase(getApplicationContext()).tasksDao().getAll();
 
         taskList.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-        Amplify.DataStore.query(Task.class,
-                task -> {
-                    List<Tasks> tasks = new ArrayList<>();
-                    while (task.hasNext()) {
-                        Task todo = task.next();
-                        Tasks newTask = new Tasks();
 
-
-                        newTask.setTitle(todo.getTitle());
-                        newTask.setBody(todo.getDescription());
-                        newTask.setState(todo.getStatus());
-
-                        tasks.add(newTask); 
-
-                        taskList.setAdapter(new TaskAdapter(MainActivity.this,tasks));
-
-
-                        Log.i("Tutorial", "==== Todo ====");
-                        Log.i("Tutorial", "Name: " + todo.getTitle());
-                    }
-                },
-                failure -> Log.e("Tutorial", "Could not query DataStore", failure)
-        );
+        // room-amplify
+//        Amplify.DataStore.query(Task.class,
+//                task -> {
+//                    List<Tasks> tasks = new ArrayList<>();
+//                    while (task.hasNext()) {
+//                        Task todo = task.next();
+//                        Tasks newTask = new Tasks();
+//
+//
+//                        newTask.setTitle(todo.getTitle());
+//                        newTask.setBody(todo.getDescription());
+//                        newTask.setState(todo.getStatus());
+//
+//                        tasks.add(newTask);
+//
+//                        taskList.setAdapter(new TaskAdapter(MainActivity.this,tasks));
+//
+//
+//                        Log.i("Tutorial", "==== Todo ====");
+//                        Log.i("Tutorial", "Name: " + todo.getTitle());
+//                    }
+//                },
+//                failure -> Log.e("Tutorial", "Could not query DataStore", failure)
+//        );
 
 
 //            }

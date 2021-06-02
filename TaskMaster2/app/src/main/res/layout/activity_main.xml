@@ -11,13 +11,44 @@
         android:layout_width="124dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:text="My Tasks" />
+        android:text="My Tasks"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"/>
+    <LinearLayout
+        android:id="@+id/sign_btn_cont"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/signup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+
+            android:text="Sign Up" />
+
+        <Button
+            android:id="@+id/signin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginLeft="25dp"
+            android:text="LogIn" />
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="148dp"
-        android:layout_below="@+id/textView" />
+        android:layout_below="@+id/sign_btn_cont" />
 
 
     <LinearLayout
@@ -26,6 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/recyclerView"
         android:layout_centerHorizontal="true"
+        android:gravity="center"
         android:layout_marginStart="10dp"
         android:layout_marginTop="14dp"
         android:layout_marginEnd="10dp"
@@ -47,15 +79,36 @@
 
             android:layout_marginLeft="25dp"
             android:text="All Tasks" />
+
     </LinearLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/task_button_cont"
+    android:layout_centerHorizontal="true"
+    android:gravity="center">
+
 
     <Button
         android:id="@+id/settingsbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/task_button_cont"
+
         android:layout_centerHorizontal="true"
         android:text="Settings " />
+    <Button
+        android:id="@+id/logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/settingsbtn"
+        android:layout_marginLeft="25dp"
+        android:text="Logout" />
+
+
+
+
+    ></LinearLayout>
+
 
 
     <LinearLayout
@@ -67,7 +120,8 @@
         android:layout_marginTop="33dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        android:gravity="center">
 
         <Button
             android:id="@+id/TaskAbtn"
@@ -102,7 +156,9 @@
         android:layout_marginTop="19dp"
         android:layout_marginEnd="126dp"
         android:layout_marginBottom="10dp"
-        android:text="username" />
+        android:text="username"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"/>
 
 
 </RelativeLayout>

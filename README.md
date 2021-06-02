@@ -107,6 +107,47 @@ this was implemented on the recycler view - the first task
 
 
 
+> # lab-32 rooms
+using rooms 
+
+
+
+> # lab-36 rooms
+
+![](screenshots/1-home.jpg.jpg)
+starting at the homepage 
+
+![](screenshots/2-signup.jpg)
+when you choose signup 
+you will be directed to the sign up page 
+
+![](screenshots/3-waitingforcode.jpg)
+
+after you fill your info and press sign up  you will be directed to a confirmation page where you are requested to enter a confirmation code that is sent to your email.  
+
+
+![](screenshots/4-code.jpg)
+
+fill in the code 
+
+
+![](screenshots/5-login.jpg)
+
+after you enter your verification code successfully, you are directed to a login page where you can login 
+
+
+![](screenshots/5-blogin.jpg)
+fill in your info 
+
+
+![](screenshots/6-backtohome.jpg)
+after you login successfully you will be directed to the homepage. 
+
+
+
+
+
+
 
 
 
