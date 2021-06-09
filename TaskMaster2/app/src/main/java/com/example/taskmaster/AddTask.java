@@ -1,12 +1,18 @@
 package com.example.taskmaster;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.FileUtils;
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +25,11 @@ import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.AWSDataStorePlugin;
 import com.amplifyframework.datastore.generated.model.Task;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 //
@@ -27,19 +38,12 @@ import java.util.List;
 public class AddTask extends AppCompatActivity {
 EditText title ,body,state;
 
+    String fileName = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
-
-        try {
-            Amplify.addPlugin(new AWSDataStorePlugin());
-            Amplify.configure(getApplicationContext());
-
-            Log.i("Tutorial", "Initialized Amplify");
-        } catch (AmplifyException e) {
-            Log.e("Tutorial", "Could not initialize Amplify", e);
-        }
 
 
         // the back icon
@@ -50,10 +54,14 @@ EditText title ,body,state;
 //        TextView taskAdded = findViewById(R.id.taskadded);
 //        taskAdded.setVisibility(View.GONE);
 
+
+
         title = findViewById(R.id.editTextTextPersonName);
         body = findViewById(R.id.editTextTextPersonName2);
         state = findViewById(R.id.editTextStateInAddTask);
 
+        // upload btn
+        Button uoload = findViewById(R.id.uploadbtn);
 
         List<Tasks> tasks = AppDatabase.getDatabase(getApplicationContext()).tasksDao().getAll();
         TextView taskcount= findViewById(R.id.textView5);
@@ -71,42 +79,55 @@ EditText title ,body,state;
                 String stringBody = body.getText().toString();
                 String stringState = state.getText().toString();
 
+
+
                 if(!stringTitle.isEmpty() && !stringBody.isEmpty() && !stringState.isEmpty()){
 
                     Tasks tasksi = new Tasks();
                     tasksi.setTitle(stringTitle);
                     tasksi.setBody(stringBody);
                     tasksi.setState(stringState);
+                    tasksi.setFile(fileName);
+
+
+
+                    Toast.makeText(AddTask.this, fileName+"*", Toast.LENGTH_SHORT).show();
 
 
                     // create a Toast
-                    Toast.makeText(AddTask.this, "Task Added! ", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(AddTask.this, "Task Added! ", Toast.LENGTH_SHORT).show();
 
 //                        AppDatabase.getDatabase(getApplicationContext()).tasksDao().insertAll(tasksi);
                     // replace this with the amplify code
-//                    AppDatabase.getDatabase(getApplicationContext()).tasksDao().insertTasks(tasksi);
+                    AppDatabase.getDatabase(getApplicationContext()).tasksDao().insertTasks(tasksi);
 
-                    Task item = Task.builder()
-                            .title(stringTitle)
-                            .description(stringBody)
-                            .status(stringState)
-                            .build();
-
-
-                    Amplify.DataStore.save(item,
-                            success -> Log.i("Tutorial", "Saved item: " + success.item().getTitle()),
-                            error -> Log.e("Tutorial", "Could not save item to DataStore", error)
-                    );
-
-
+//                    Task item = Task.builder()
+//                            .title(stringTitle)
+//                            .description(stringBody)
+//                            .status(stringState)
+//                            .build();
+//
+//
+//                    Amplify.DataStore.save(item,
+//                            success -> Log.i("Tutorial", "Saved item: " + success.item().getTitle()),
+//                            error -> Log.e("Tutorial", "Could not save item to DataStore", error)
+//                    );
 
 
-                    Intent intent = new Intent(AddTask.this, MainActivity.class);
-                    startActivity(intent);
+
+//
+//                    Intent intent = new Intent(AddTask.this, MainActivity.class);
+//                    startActivity(intent);
+
+                    finish();
 
                 }else{
                     Toast.makeText(AddTask.this, "Please Add Data", Toast.LENGTH_SHORT).show();
                 }
+
+
+
+
 
 //                TextView myTask = findViewById(R.id.editTextTextPersonName);
 //                myTask.setVisibility(View.INVISIBLE);
@@ -160,7 +181,68 @@ EditText title ,body,state;
             }
         });
 
+                uoload.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                        intent.setType("*/*");
+                        startActivityForResult(intent,9999);
+
+                    }
+                });
+
         
     }
+
+
+
+
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // how to upload the files of a specific type --> use uri insted of copying the file yourself
+        if(requestCode ==9999){
+
+            Uri getUri = data.getData();
+            Cursor returnCursor = getContentResolver().query(getUri, null, null, null, null);
+            int namei = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+            returnCursor.moveToFirst();
+
+
+            String UplodedFileName = returnCursor.getString(namei );
+            this.fileName = UplodedFileName;
+
+
+
+            File file = new File(getApplicationContext().getFilesDir(), UplodedFileName);
+            try{
+                InputStream inputStream = getContentResolver().openInputStream(getUri);
+
+                  FileUtils.copy(inputStream, new FileOutputStream(file));
+                  //the key will be the name of the file that you willl be getting form the intent
+//                  uploadfile(file,UplodedFileName);
+
+                Amplify.Storage.uploadFile(
+                        UplodedFileName,
+                        file,
+                        result -> Log.i("MyAmplifyApp", "Successfully uploaded: " + result.getKey()),
+                        storageFailure -> Log.e("MyAmplifyApp", "Upload failed", storageFailure)
+                );
+
+
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+
 
 }

@@ -1,5 +1,7 @@
 package com.example.taskmaster;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -7,7 +9,9 @@ import androidx.room.Room;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.FileUtils;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +19,7 @@ import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
@@ -22,7 +27,15 @@ import com.amplifyframework.auth.options.AuthSignOutOptions;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.AWSDataStorePlugin;
 import com.amplifyframework.datastore.generated.model.Task;
+import com.amplifyframework.storage.s3.AWSS3StoragePlugin;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,11 +53,38 @@ public class MainActivity extends AppCompatActivity {
         try {
             // Add this line, to include the Auth plugin.
             Amplify.addPlugin(new AWSCognitoAuthPlugin());
+            Amplify.addPlugin(new AWSS3StoragePlugin());
             Amplify.configure(getApplicationContext());
             Log.i("MyAmplifyApp", "Initialized Amplify");
         } catch (AmplifyException error) {
             Log.e("MyAmplifyApp", "Could not initialize Amplify", error);
         }
+
+
+
+
+////
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull com.google.android.gms.tasks.Task<String> task) {
+
+                        if (!task.isSuccessful()) {
+                            Log.w("TokenMessage", "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+                        // Get new FCM registration token
+                        String token = task.getResult();
+                        // Log and toast
+                        Log.d("notification recieved", " notification recieved ");
+                        Log.d("TokenGenerated", token);
+//                        Toast.makeText(MainActivity.this, token, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+       //
+
+
 
         TextView homeuser = findViewById(R.id.usernamehomepage);
       signup = findViewById(R.id.signup);
@@ -66,6 +106,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
+
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,8 +128,27 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+        // add a clivk listener for uploading
+//        getFileFromMobileStorage();
 
 
+        // you will need tp rovied the option to view or download the file
+        // chaneged the file type from txt ot jpg for now
+
+//        Amplify.Storage.downloadFile(
+//                "thisIsMyKey",
+//                new File(getApplicationContext().getFilesDir() + "/testImage.jpg"),
+//                result -> Log.i("MyAmplifyApp", "Successfully downloaded: " + result.getFile().getName()),
+//                // change .getname ---> touri or topath to get it as a link
+//                error -> Log.e("MyAmplifyApp",  "Download Failure", error)
+//        );
+
+        // add an imape view on each single task so if the attatchment is an image it will be dispalied in the take, and provied a download link for the other types of filesto get it to your file
+
+
+
+
+        
         // for the room lab
 //        try {
 //            Amplify.addPlugin(new AWSDataStorePlugin());
@@ -228,9 +290,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         // replace with amplify
-//             List<Tasks> tasks = AppDatabase.getDatabase(getApplicationContext()).tasksDao().getAll();
+             List<Tasks> tasks = AppDatabase.getDatabase(getApplicationContext()).tasksDao().getAll();
+
+
 
         taskList.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        taskList.setAdapter(new TaskAdapter(MainActivity.this,tasks));
 
         // room-amplify
 //        Amplify.DataStore.query(Task.class,
@@ -275,12 +340,52 @@ public class MainActivity extends AppCompatActivity {
 //        taskList.setAdapter(new TaskAdapter(   this,tasksList));
 
 
-
-
-
-
-
-
-
     }
+
+
+//    @RequiresApi(api = Build.VERSION_CODES.Q)
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+
+//        if (requestCode == AWSCognitoAuthPlugin.WEB_UI_SIGN_IN_ACTIVITY_CODE) {
+//            Amplify.Auth.handleWebUISignInResponse(data);
+//        }
+//
+        // how to upload the files of a specific type --> use uri insted of copying the file yourself
+//        if(requestCode ==9999){
+//            File file = new File(getApplicationContext().getFilesDir(), "uploads");
+//            try{
+//                InputStream inputStream = getContentResolver().openInputStream(data.getData());
+//                FileUtils.copy(inputStream, new FileOutputStream(file));
+//                //the key will be the name of the file that you willl be getting form the intent
+//                uploadfile(file,"thisIsMyKey");
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
+
+
+
+
+//    // here use intent.pic
+//    public void getFileFromMobileStorage(){
+//        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//        intent.setType("*/*");
+//        startActivityForResult(intent,9999);
+//    }
+//    // upload file
+//    public void uploadfile(File file, String fileName){
+//        Amplify.Storage.uploadFile(
+//                fileName,
+//                file,
+//                result -> Log.i("MyAmplifyApp", "Successfully uploaded: " + result.getKey()),
+//                storageFailure -> Log.e("MyAmplifyApp", "Upload failed", storageFailure)
+//        );
+//    }
+
+
 }
