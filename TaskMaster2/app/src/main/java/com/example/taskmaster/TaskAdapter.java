@@ -81,12 +81,14 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
                 String str_body  = tasksList.get(postion).getBody();
                 String str_state  = tasksList.get(postion).getState();
                  int id = tasksList.get(position).getId();
+              String fileName = tasksList.get(position).getFile();
 
                 Intent intent = new Intent(context, TaskDetailPage.class);
                 intent.putExtra("title", str_title);
                 intent.putExtra("body", str_body);
                 intent.putExtra("state", str_state);
                 intent.putExtra("id", id);
+                intent.putExtra("fileName",fileName);
                 context.startActivity(intent);
 
             }

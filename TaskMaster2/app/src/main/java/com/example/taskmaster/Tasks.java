@@ -18,14 +18,26 @@ public class Tasks {
     @ColumnInfo(name = "state")
     public String state;
 
+    String file = null;
+
+
     public Tasks() {
 
     }
 
-    public Tasks(String title, String body, String state) {
+    public Tasks(String title, String body, String state, String file) {
         this.title = title;
         this.body = body;
         this.state = state;
+        this.file = file;
+    }
+
+    public String getFile() {
+        return file;
+    }
+
+    public void setFile(String file) {
+        this.file = file;
     }
 
     public String getTitle() {
